@@ -29,6 +29,8 @@
 #define INFOS_LIST_MAX  6
 #define INFOS_DATA_MAX  2
 
+static Adafruit_ST7789 d(TFT_CS, TFT_DC, TFT_RST);
+
 enum mqttState: int {
   MQTT_STATE_NOTCONNECTED,
   MQTT_STATE_CONNECTED,
@@ -49,8 +51,8 @@ class simpleUI {
     
     void setBatteryLevel(int level);
     
-    void setPlugOn()   { d->drawBitmap(170, 0, bmp_plug, 24, 24, ST77XX_WHITE); }
-    void setPlugOff()  { d->drawBitmap(170, 0, bmp_plug, 24, 24, ST77XX_BLACK); }
+    void setPlugOn()   { d.drawBitmap(170, 0, bmp_plug, 24, 24, ST77XX_WHITE); }
+    void setPlugOff()  { d.drawBitmap(170, 0, bmp_plug, 24, 24, ST77XX_BLACK); }
 
     void blinkRx() { set_blink(bmp_arrowDown, 140, 0, ST77XX_WHITE); oledBlinkRxOn = true; oledBlinkTimerefRx = millis(); }
     void blinkTx() { set_blink(bmp_arrowUp, 120, 0, ST77XX_WHITE); oledBlinkTxOn = true; oledBlinkTimerefTx = millis(); }
@@ -103,7 +105,7 @@ class simpleUI {
     char timeBuf[20];
 
     //#ifdef _ADAFRUIT_ST7789H_
-    Adafruit_ST7789 *d;
+    //Adafruit_ST7789 *d;
     //#endif
     
     void set_blink(const uint8_t *bitmap, uint8_t x, uint8_t y, uint16_t color);

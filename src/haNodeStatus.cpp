@@ -20,13 +20,22 @@ String haNodeStatus::getEpochTime() {
     timeClient.update();
     String etime = String(timeClient.getEpochTime());
     timeClient.end();
-    //Serial.println(timeClient.getEpochTime());
+    Serial.println(timeClient.getEpochTime());
     timeAvailable = true;
     return etime;
       
   } else {
     return String();
   }
+}
 
-  
+String haNodeStatus::convertEpochToDate(String etime) {
+  struct tm  ts;
+  char buf[80];
+  // Format time, "ddd yyyy-mm-dd hh:mm:ss zzz"
+  time_t uli = strtol(etime.c_str(),NULL,10);
+  ts = *localtime(&uli);
+  //strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", &ts);
+  strftime(buf, sizeof(buf), "%d/%m/%y %H:%M %Z", &ts);
+  return String(buf);
 }

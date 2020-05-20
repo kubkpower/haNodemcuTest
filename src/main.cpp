@@ -91,7 +91,8 @@ void setup()
 
   String myIP = WiFi.localIP().toString();
   ecran->setInfos(0,(String("SSID: ")+String(WiFi.SSID())));
-  ecran->setInfos(0,(String("IP: ") + myIP));
+  ecran->setInfos(1,(String("IP: ") + myIP));
+  ecran->setInfos(2,String("Started since"));
   ecran->setLabel(0, "Temperature");
   ecran->setLabel(1, "Humidity");
 }
@@ -101,6 +102,16 @@ void loop()
   //ecran->runDemo();
   ctrl->loop();
   ecran->loop();
+
+  // Retrieve the startuptime asap
+  if (startupTime == "") {
+    if (!myStatus.timeAvailable)
+      startupTime = myStatus.getEpochTime();
+      //
+      String strTime = myStatus.convertEpochToDate(startupTime);
+      Serial.print("Startup time: "); Serial.println(strTime);
+      ecran->setInfos(3,strTime);
+  }
 
   nodeButton.loop();
   if (nodeDht.refreshData()) {
@@ -117,9 +128,7 @@ void loop()
     // Get startup time if internet available and connected   
     
     myStatus.loop();
-    if (!myStatus.timeAvailable) {
-      startupTime = myStatus.getEpochTime();
-    } else {
+    if (startupTime != "") {
       uptimeSensor.setValue(startupTime);
     }
     
